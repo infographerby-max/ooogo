@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="be">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ooogo.org</title>
+<meta name="description" content="Маленькія праекты якія здзіўляюць і застаюцца ў памяці.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=Golos+Text:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Golos Text',sans-serif;background:#f4f1ea;color:#1a1a1a;min-height:100vh;}
+
+nav{display:flex;align-items:center;justify-content:space-between;padding:18px 28px;background:#f4f1ea;border-bottom:0.5px solid rgba(26,26,26,0.08);}
+.logo{font-family:'Unbounded',sans-serif;font-size:20px;font-weight:900;letter-spacing:-0.02em;color:#1a1a1a;text-decoration:none;}
+.logo span{color:#e05c2a;}
+.btn-support{font-size:12px;font-family:'Golos Text',sans-serif;padding:8px 18px;border:0.5px solid rgba(224,92,42,0.45);border-radius:20px;background:transparent;color:#e05c2a;cursor:pointer;transition:all 0.2s;text-decoration:none;display:inline-block;}
+.btn-support:hover{background:rgba(224,92,42,0.08);}
+
+.hero{padding:56px 28px 40px;}
+.hero-eyebrow{font-size:11px;letter-spacing:0.13em;text-transform:uppercase;color:rgba(26,26,26,0.33);margin-bottom:18px;}
+.hero-title{font-family:'Unbounded',sans-serif;font-size:clamp(36px,8vw,64px);font-weight:900;line-height:1.05;letter-spacing:-0.03em;color:#1a1a1a;margin-bottom:16px;}
+.hero-title em{font-style:normal;color:#e05c2a;}
+.hero-sub{font-size:clamp(14px,3vw,16px);color:rgba(26,26,26,0.48);line-height:1.7;max-width:400px;}
+
+.toolbar{display:flex;align-items:center;gap:6px;padding:20px 28px;flex-wrap:wrap;border-bottom:0.5px solid rgba(26,26,26,0.08);}
+.divider{width:0.5px;height:18px;background:rgba(26,26,26,0.15);flex-shrink:0;margin:0 2px;}
+.tb-btn{font-size:12px;padding:7px 14px;border-radius:20px;border:0.5px solid rgba(26,26,26,0.14);background:transparent;color:rgba(26,26,26,0.5);cursor:pointer;font-family:'Golos Text',sans-serif;transition:all 0.15s;white-space:nowrap;}
+.tb-btn:hover{border-color:rgba(26,26,26,0.28);color:#1a1a1a;}
+.tb-btn.accent{background:#1a1a1a;color:#f4f1ea;border-color:#1a1a1a;}
+.tb-btn.accent:hover{opacity:0.8;}
+.tb-btn.on{border-color:rgba(224,92,42,0.55);color:#e05c2a;background:rgba(224,92,42,0.07);}
+.tb-count{font-size:12px;padding:7px 14px;border-radius:20px;border:0.5px solid rgba(26,26,26,0.14);background:rgba(26,26,26,0.04);color:rgba(26,26,26,0.4);font-family:'Unbounded',sans-serif;font-weight:400;white-space:nowrap;cursor:default;}
+
+.section{padding:28px 28px 48px;}
+
+.empty{
+  padding:64px 28px;
+  text-align:center;
+  color:rgba(26,26,26,0.28);
+  font-size:14px;
+  line-height:1.7;
+}
+.empty-icon{font-size:32px;margin-bottom:16px;opacity:0.4;}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;}
+.card{border-radius:12px;border:0.5px solid rgba(26,26,26,0.1);overflow:hidden;cursor:pointer;transition:border-color 0.2s,transform 0.18s;background:#fff;text-decoration:none;display:block;color:inherit;}
+.card:hover{border-color:rgba(26,26,26,0.22);transform:translateY(-2px);}
+.card.big{grid-column:span 2;}
+@media(max-width:420px){.card.big{grid-column:span 1;}}
+.thumb{height:110px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.card.big .thumb{height:150px;}
+.badge-new{position:absolute;top:10px;right:10px;font-size:9px;font-family:'Golos Text',sans-serif;letter-spacing:0.06em;text-transform:uppercase;padding:3px 8px;border-radius:20px;background:rgba(224,92,42,0.12);color:#e05c2a;border:0.5px solid rgba(224,92,42,0.28);}
+.card-body{padding:13px 15px;}
+.card-tag{font-size:10px;letter-spacing:0.07em;text-transform:uppercase;color:rgba(26,26,26,0.28);margin-bottom:5px;}
+.card-title{font-family:'Unbounded',sans-serif;font-size:12px;font-weight:400;color:#1a1a1a;line-height:1.4;margin-bottom:5px;}
+.card-desc{font-size:11px;color:rgba(26,26,26,0.43);line-height:1.5;}
+
+.surprise-row{padding:0 28px 52px;}
+.surprise-btn{font-family:'Golos Text',sans-serif;font-size:14px;padding:14px 26px;background:transparent;border:0.5px solid rgba(26,26,26,0.15);border-radius:8px;color:rgba(26,26,26,0.48);cursor:pointer;transition:all 0.2s;display:inline-flex;align-items:center;gap:10px;}
+.surprise-btn:hover{border-color:rgba(26,26,26,0.3);color:#1a1a1a;}
+
+footer{padding:24px 28px;border-top:0.5px solid rgba(26,26,26,0.08);background:#eae6db;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.footer-logo{font-family:'Unbounded',sans-serif;font-size:13px;font-weight:900;color:rgba(26,26,26,0.22);}
+.footer-logo span{color:rgba(224,92,42,0.4);}
+.footer-link{font-size:12px;color:rgba(26,26,26,0.28);cursor:pointer;text-decoration:none;}
+.footer-link:hover{color:rgba(26,26,26,0.6);}
+
+@media(max-width:600px){
+  nav{padding:14px 20px;}
+  .hero{padding:40px 20px 28px;}
+  .toolbar{padding:14px 20px;gap:5px;}
+  .section{padding:20px 20px 40px;}
+  .surprise-row{padding:0 20px 40px;}
+  footer{padding:20px;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo">o<span>o</span>ogo</a>
+  <!-- ЗАМЕНІ: устаў сваю спасылку на Ko-fi -->
+  <a href="https://ko-fi.com/ТВОЙНИК" target="_blank" class="btn-support">Падтрымаць</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-eyebrow">Гульні · Інтэрактывы</div>
+  <h1 class="hero-title"><em>Ого.</em><br>Зайдзі.</h1>
+  <p class="hero-sub">Маленькія праекты якія здзіўляюць і застаюцца ў памяці.</p>
+</div>
+
+<div class="toolbar">
+  <button class="tb-btn accent" onclick="surprise()">✦ Здзіві мяне</button>
+  <div class="divider"></div>
+  <button class="tb-btn on" onclick="fc('all',this)">Усе праекты</button>
+  <div class="tb-count" id="count">0</div>
+  <div class="divider"></div>
+  <button class="tb-btn" onclick="fc('game',this)">Гульні</button>
+  <button class="tb-btn" onclick="fc('inter',this)">Інтэрактывы</button>
+  <button class="tb-btn" onclick="fc('by',this)">Пра Беларусь</button>
+</div>
+
+<div class="section">
+  <div class="grid" id="grid"></div>
+  <div class="empty" id="empty">
+    <div class="empty-icon">✦</div>
+    Праекты хутка з'явяцца.
+  </div>
+</div>
+
+<div class="surprise-row">
+  <button class="surprise-btn" onclick="surprise()">
+    <span style="font-size:15px;">✦</span>
+    Здзіві мяне — выпадковы праект
+  </button>
+</div>
+
+<footer>
+  <div class="footer-logo">o<span>o</span>ogo<span>.</span>org</div>
+  <!-- ЗАМЕНІ: устаў сваю спасылку на Ko-fi -->
+  <a href="https://ko-fi.com/ТВОЙНИК" target="_blank" class="footer-link">Падтрымаць</a>
+</footer>
+
+<script>
+/*
+  ===== ЯК ДАДАЦЬ ПРАЕКТ =====
+
+  Скапіруй адзін з блокаў ніжэй і дадай у масіў projects.
+
+  Поля:
+    url      — шлях да праекта, напр. './bajzau-shagal/'
+    cat      — катэгорыі праз прабел: 'game', 'inter', 'by' (можна некалькі)
+    tag      — тэкст тэга на картцы, напр. 'Гульня · Беларусь'
+    title    — назва праекта
+    desc     — кароткае апісанне
+    thumb    — колер фону мініяцюры (hex)
+    icon     — эмодзі або тэкст у цэнтры мініяцюры
+    isNew    — true калі хочаш значок 'Новае'
+    big      — true калі картка двайной шырыні (для галоўнага праекта)
+
+  ПРЫКЛАД:
+  {
+    url:   './bajzau-shagal/',
+    cat:   'game by',
+    tag:   'Гульня · Беларусь',
+    title: 'Бяжаў Шагал',
+    desc:  'Адна кнопка. Дах Віцебска.',
+    thumb: '#dceaf5',
+    icon:  '🏃',
+    isNew: true,
+    big:   true
+  }
+*/
+
+const projects = [
+  /* дадай сюды свае праекты */
+];
+
+/* ===== НЕ МЯНЯЙ НІЖЭЙ ===== */
+
+function render(list) {
+  const grid = document.getElementById('grid');
+  const empty = document.getElementById('empty');
+  document.getElementById('count').textContent = list.length;
+
+  if (list.length === 0) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+
+  empty.style.display = 'none';
+  grid.innerHTML = list.map(p => `
+    <a href="${p.url}" class="card${p.big ? ' big' : ''}" data-cat="${p.cat}">
+      <div class="thumb" style="background:${p.thumb}">
+        ${p.isNew ? '<span class="badge-new">Новае</span>' : ''}
+        <span style="font-size:${p.big ? '34' : '28'}px">${p.icon}</span>
+      </div>
+      <div class="card-body">
+        <div class="card-tag">${p.tag}</div>
+        <div class="card-title">${p.title}</div>
+        <div class="card-desc">${p.desc}</div>
+      </div>
+    </a>
+  `).join('');
+}
+
+function fc(cat, btn) {
+  document.querySelectorAll('.tb-btn:not(.accent)').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  const list = cat === 'all'
+    ? projects
+    : projects.filter(p => p.cat.includes(cat));
+  render(list);
+}
+
+function surprise() {
+  const cards = [...document.querySelectorAll('.card')];
+  if (!cards.length) return;
+  const t = cards[Math.floor(Math.random() * cards.length)];
+  t.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  t.style.outline = '2px solid #e05c2a';
+  setTimeout(() => t.style.outline = '', 900);
+}
+
+render(projects);
+</script>
+
+</body>
+</html>
