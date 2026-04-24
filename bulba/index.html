@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="be">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>БУЛЬБА</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@900&family=Manrope:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream: #FBF8F2;
+  --warm: #FFF9F0;
+  --brown: #3D2008;
+  --brown-mid: #8B6B4A;
+  --terra: #C8581A;
+  --terra-l: #E8845A;
+  --sage: #6B8F3E;
+  --sage-l: #A8C87A;
+  --gold: #C8960C;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+@media(min-width:768px){
+  html { scroll-snap-type:y mandatory; }
+  section { scroll-snap-align:start; scroll-snap-stop:always; }
+}
+body { background:var(--cream); color:var(--brown); font-family:'Manrope',sans-serif; overflow-x:hidden; }
+
+/* PROGRESS */
+#pb { position:fixed; top:0; left:0; height:3px; background:var(--terra); width:0%; z-index:999; transition:width .1s linear; }
+
+/* SECTIONS */
+section {
+  min-height:100vh;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:clamp(40px,6vh,80px) clamp(24px,6vw,100px);
+  position:relative; overflow:hidden;
+  gap:clamp(14px,2.5vh,28px);
+}
+section:nth-child(odd)  { background:var(--cream); }
+section:nth-child(even) { background:var(--warm); }
+
+/* REVEAL */
+.rv { opacity:0; transform:translateY(40px); transition:opacity .7s ease-out, transform .7s ease-out; }
+.rv.in { opacity:1; transform:translateY(0); }
+.d1{transition-delay:.12s} .d2{transition-delay:.26s} .d3{transition-delay:.42s} .d4{transition-delay:.58s}
+
+/* WOW TEXT */
+.wow {
+  font-family:'Unbounded',sans-serif; font-weight:900;
+  line-height:.88; letter-spacing:-.025em;
+  text-align:center; text-wrap:balance;
+  color:var(--brown);
+}
+.wow-hero  { font-size:clamp(64px,15vw,200px); color:var(--terra); }
+.wow-xl    { font-size:clamp(44px,11vw,148px); }
+.wow-xxl   { font-size:clamp(34px,9vw,118px); }
+.wow-terra { color:var(--terra); }
+.wow-gold  { color:var(--gold); }
+.wow-cream { color:var(--cream); }
+
+/* BODY */
+.body {
+  font-family:'Manrope',sans-serif; font-weight:500;
+  font-size:clamp(16px,1.6vw,20px); line-height:1.8;
+  color:var(--brown-mid); max-width:560px; text-align:center;
+}
+
+/* IDLE ANIMATIONS */
+@keyframes breathe { 0%,100%{transform:scale(1) rotate(-1.5deg)} 50%{transform:scale(1.025) rotate(1.5deg)} }
+@keyframes sway    { 0%,100%{transform:rotate(-2.5deg)} 50%{transform:rotate(2.5deg)} }
+@keyframes glow    { 0%,100%{opacity:.55} 50%{opacity:1} }
+@keyframes spin    { to{transform:rotate(360deg)} }
+@keyframes bounce  { 0%,100%{transform:translateY(0)} 50%{transform:translateY(9px)} }
+@keyframes rocketFloat { 0%,100%{transform:translateY(-24px)} 50%{transform:translateY(-40px)} }
+
+.idle-breathe { animation:breathe 3.5s ease-in-out infinite; }
+.idle-sway    { animation:sway 2.5s ease-in-out infinite; transform-origin:top center; }
+
+/* SCROLL ARROW */
+.scroll-arr { position:absolute; bottom:28px; animation:bounce 2.2s ease-in-out infinite; opacity:.4; }
+
+/* SLOT MACHINE BILLION */
+#billion { background:var(--terra) !important; }
+#billion .body { color:rgba(251,248,242,.78); }
+.slots { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:clamp(1px,0.4vw,6px); }
+.slot-digit {
+  overflow:hidden; height:clamp(40px,9vw,116px);
+  font-family:'Unbounded',sans-serif; font-weight:900;
+  font-size:clamp(36px,8.5vw,110px); color:var(--cream);
+  letter-spacing:-.04em; line-height:1;
+}
+.slot-inner { display:flex; flex-direction:column; transition:transform .7s cubic-bezier(.23,1,.32,1); }
+.slot-sep { font-family:'Unbounded',sans-serif; font-weight:900; font-size:clamp(30px,7vw,90px); color:var(--cream); opacity:.7; align-self:center; }
+
+/* BAR CHART */
+.bars { display:flex; align-items:flex-end; gap:clamp(20px,4vw,56px); }
+.bar-item { display:flex; flex-direction:column; align-items:center; gap:8px; }
+.bar { width:clamp(44px,7vw,76px); border-radius:7px 7px 0 0; transform-origin:bottom; transform:scaleY(0); transition:transform 1.1s cubic-bezier(.34,1.56,.64,1); }
+.bar.up { transform:scaleY(1); }
+.bar-lbl { font-family:'Unbounded',sans-serif; font-weight:900; font-size:clamp(11px,1.4vw,15px); color:var(--brown); text-align:center; }
+.bar-sub { font-size:clamp(9px,1.1vw,12px); color:var(--brown-mid); text-align:center; }
+
+/* RECIPE CARDS */
+.rcards { display:flex; gap:clamp(10px,2vw,22px); flex-wrap:wrap; justify-content:center; }
+.rcard {
+  width:clamp(90px,14vw,130px); height:clamp(110px,18vw,160px);
+  border-radius:14px; background:var(--cream); border:2px solid #E2D4C0;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:8px; font-size:clamp(10px,1.3vw,14px); font-weight:600; color:var(--brown);
+  text-align:center; padding:10px;
+  perspective:600px; transform-style:preserve-3d;
+  transform:rotateY(90deg); opacity:0;
+  transition:transform .55s cubic-bezier(.34,1.56,.64,1), opacity .3s;
+}
+.rcard.in { transform:rotateY(0); opacity:1; }
+.rcard:hover { transform:scale(1.06); }
+
+/* VARIETY GRID */
+.vgrid { display:flex; flex-wrap:wrap; gap:5px; max-width:clamp(260px,44vw,480px); justify-content:center; }
+.vp { opacity:0; transform:scale(.15); transition:opacity .3s, transform .4s cubic-bezier(.34,1.56,.64,1); }
+.vp.pop { opacity:1; transform:scale(1); }
+
+/* COUNTRY DOTS */
+.cdot { opacity:0; transition:opacity .35s; }
+.cdot.lit { opacity:1; }
+
+/* WATER FILL */
+#wfill { transform-origin:bottom; transform:scaleY(0); transition:transform 1.5s ease .3s; }
+#wfill.up { transform:scaleY(1); }
+
+/* CHROM BARS */
+.cbar { transform-origin:bottom; transform:scaleY(0); transition:transform .8s cubic-bezier(.34,1.56,.64,1); }
+.cbar.up { transform:scaleY(1); }
+
+/* SCALE TIP */
+#scale-beam { transform-origin:50% 50%; transition:transform 1.2s ease .3s; }
+#scale-beam.tipped { transform:rotate(-9deg); }
+
+/* BULB GLOW */
+#bglow { opacity:0; transition:opacity .9s .4s; }
+#bglow.on { opacity:1; animation:glow 1.5s ease-in-out infinite; }
+
+/* SPACE POTATO */
+#space-pot { animation:spin 22s linear infinite; transform-origin:center; }
+.star-field { position:absolute; inset:0; pointer-events:none; }
+
+/* PROGRESS BAR */
+#water-pct { transition:opacity .4s; }
+
+/* CLOSING CONFETTI */
+.cf { position:absolute; top:-50px; pointer-events:none; animation:none; }
+@keyframes cffall { 0%{transform:translateY(0) rotate(0)} 100%{transform:translateY(115vh) rotate(600deg); opacity:0} }
+
+/* BACK BUTTON */
+#back-btn {
+  position:fixed; top:16px; left:18px; z-index:998;
+  font-family:'Unbounded',sans-serif; font-weight:900;
+  font-size:clamp(10px,1.1vw,13px);
+  color:var(--brown); text-decoration:none;
+  letter-spacing:.02em; opacity:.55; transition:opacity .2s;
+  padding:6px 11px; border-radius:6px;
+  background:rgba(251,248,242,.88);
+  backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+  border:1.5px solid rgba(61,32,8,.14);
+  line-height:1;
+}
+#back-btn:hover { opacity:1; }
+
+/* MOBILE */
+@media(max-width:480px){
+  section { padding:32px 16px; gap:12px; }
+  .wow-hero { font-size:clamp(52px,21vw,140px) !important; }
+  .wow-xl   { font-size:clamp(36px,16vw,100px) !important; }
+  .wow-xxl  { font-size:clamp(28px,13vw,80px)  !important; }
+  .body { font-size:15px !important; max-width:100%; }
+  .bars { gap:18px; }
+  .rcards { gap:7px; }
+  .rcard { width:clamp(70px,21vw,100px); height:clamp(86px,26vw,120px); }
+  .vgrid { max-width:90vw; }
+  .merge-row { gap:10px; }
+}
+</style>
+</head>
+<body>
+<div id="pb"></div>
+<a id="back-btn" href="../">← ooogo</a>
+
+<!-- ══════════════ S1 HERO ══════════════ -->
+<section id="s1">
+  <h1 class="wow wow-hero rv">БУЛЬБА</h1>
+  <div class="rv d1" style="display:flex;justify-content:center"><svg class="idle-breathe" viewBox="0 0 340 260" fill="none" style="width:clamp(200px,32vw,380px)">
+    <!-- cast shadow -->
+    <ellipse cx="170" cy="248" rx="110" ry="10" fill="#5C3A1E" opacity=".11"/>
+    <!-- base body -->
+    <ellipse cx="170" cy="155" rx="118" ry="84" fill="#B8864E"/>
+    <!-- mid tone -->
+    <ellipse cx="170" cy="155" rx="110" ry="76" fill="#C8964E" opacity=".7"/>
+    <!-- highlight -->
+    <ellipse cx="136" cy="122" rx="66" ry="42" fill="#D4A870" opacity=".52"/>
+    <!-- skin texture -->
+    <ellipse cx="128" cy="148" rx="12" ry="7" fill="#9A6B35" opacity=".22" transform="rotate(-18,128,148)"/>
+    <ellipse cx="196" cy="138" rx="10" ry="6" fill="#9A6B35" opacity=".2" transform="rotate(12,196,138)"/>
+    <ellipse cx="164" cy="182" rx="14" ry="8" fill="#9A6B35" opacity=".18" transform="rotate(-8,164,182)"/>
+    <ellipse cx="218" cy="162" rx="9" ry="5" fill="#9A6B35" opacity=".2" transform="rotate(22,218,162)"/>
+    <ellipse cx="140" cy="172" rx="8" ry="5" fill="#9A6B35" opacity=".16" transform="rotate(-14,140,172)"/>
+    <ellipse cx="205" cy="185" rx="11" ry="6" fill="#9A6B35" opacity=".17" transform="rotate(8,205,185)"/>
+    <!-- shadow crescent -->
+    <ellipse cx="210" cy="188" rx="80" ry="36" fill="#7A4F2D" opacity=".36"/>
+    <!-- eye nubs -->
+    <circle cx="146" cy="142" r="5.5" fill="#8B5E28"/>
+    <circle cx="195" cy="133" r="4.5" fill="#8B5E28"/>
+    <circle cx="168" cy="172" r="4" fill="#8B5E28"/>
+    <!-- sprout 1 -->
+    <path d="M143 137 C139 124 136 108 138 96" stroke="#6B8F3E" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <ellipse cx="134" cy="90" rx="10" ry="14" fill="#6B8F3E" opacity=".9" transform="rotate(-20,134,90)"/>
+    <ellipse cx="143" cy="84" rx="7" ry="11" fill="#8AAF5A" opacity=".8" transform="rotate(10,143,84)"/>
+    <!-- sprout 2 -->
+    <path d="M193 128 C197 116 196 102 194 90" stroke="#6B8F3E" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <ellipse cx="196" cy="84" rx="8" ry="12" fill="#6B8F3E" opacity=".85" transform="rotate(15,196,84)"/>
+    <!-- sprout 3 small -->
+    <path d="M167 168 C161 158 158 148 162 138" stroke="#6B8F3E" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <ellipse cx="160" cy="133" rx="6" ry="9" fill="#6B8F3E" opacity=".7" transform="rotate(-10,160,133)"/>
+  </svg>
+  </svg></div>
+  <p class="body rv d2">усё, што ты не ведаў пра галоўны клубень свету</p>
+  <div class="scroll-arr rv d3">
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+      <path d="M14 4v16M6 13l8 9 8-9" stroke="#C8581A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ══════════════ S2 — 8000 YEARS ══════════════ -->
+<section id="s2">
+  <!-- Mountains background -->
+  <svg style="position:absolute;bottom:0;left:0;width:100%;height:55%;opacity:.35" viewBox="0 0 800 300" preserveAspectRatio="xMidYMax slice" fill="none">
+    <polygon points="0,300 80,120 180,220 300,60 420,180 540,80 660,200 800,90 800,300" fill="#9A6B35"/>
+    <polygon points="0,300 60,180 160,240 280,130 380,210 500,140 620,240 750,150 800,200 800,300" fill="#C8964E" opacity=".6"/>
+  </svg>
+  <div class="wow wow-xl wow-terra rv">8 000 гадоў</div>
+  <!-- Potato in soil -->
+  <div class="rv d1" style="display:flex;justify-content:center"><svg class="idle-breathe" viewBox="0 0 300 240" fill="none" style="width:clamp(180px,30vw,340px)">
+    <!-- soil -->
+    <rect x="0" y="150" width="300" height="90" fill="#6B3A1F" rx="4" opacity=".82"/>
+    <ellipse cx="150" cy="150" rx="150" ry="10" fill="#5C3020" opacity=".7"/>
+    <!-- roots -->
+    <path d="M130 185 C120 200 105 215 98 228" stroke="#8B5E28" stroke-width="2" fill="none" stroke-linecap="round" opacity=".6"/>
+    <path d="M150 190 C150 210 155 225 150 235" stroke="#8B5E28" stroke-width="1.8" fill="none" stroke-linecap="round" opacity=".6"/>
+    <path d="M170 185 C182 202 190 215 194 228" stroke="#8B5E28" stroke-width="2" fill="none" stroke-linecap="round" opacity=".6"/>
+    <path d="M112 192 C100 208 88 212 80 220" stroke="#8B5E28" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".4"/>
+    <!-- cast shadow in soil -->
+    <ellipse cx="150" cy="162" rx="72" ry="12" fill="#3D1A08" opacity=".3"/>
+    <!-- potato body (half showing) -->
+    <ellipse cx="150" cy="148" rx="78" ry="54" fill="#B8864E"/>
+    <ellipse cx="150" cy="148" rx="70" ry="46" fill="#C8964E" opacity=".65"/>
+    <ellipse cx="122" cy="122" rx="42" ry="26" fill="#D4A870" opacity=".5"/>
+    <ellipse cx="128" cy="152" rx="11" ry="6" fill="#9A6B35" opacity=".2" transform="rotate(-15,128,152)"/>
+    <ellipse cx="180" cy="142" rx="9" ry="5" fill="#9A6B35" opacity=".2" transform="rotate(10,180,142)"/>
+    <ellipse cx="196" cy="162" rx="78" ry="28" fill="#7A4F2D" opacity=".32"/>
+    <!-- soil layer on top of potato -->
+    <rect x="0" y="156" width="300" height="84" fill="#6B3A1F" opacity=".82" rx="4"/>
+    <ellipse cx="150" cy="158" rx="150" ry="8" fill="#5C3020" opacity=".5"/>
+    <!-- small soil texture -->
+    <circle cx="68" cy="172" r="4" fill="#8B5030" opacity=".4"/>
+    <circle cx="220" cy="168" r="5" fill="#8B5030" opacity=".3"/>
+    <circle cx="180" cy="185" r="3" fill="#8B5030" opacity=".35"/>
+    <circle cx="110" cy="188" r="4" fill="#8B5030" opacity=".3"/>
+  </svg>
+  </svg></div>
+  <p class="body rv d2">Інкі пачалі вырошчваць бульбу ў Андах — яшчэ да таго, як егіпцяне пачалі будаваць піраміды.</p>
+</section>
+
+<!-- ══════════════ S3 — 1676 ══════════════ -->
+<section id="s3">
+  <div class="wow wow-xl rv">1676</div>
+  <p class="rv d1" style="font-family:'Manrope',sans-serif;font-weight:600;font-size:clamp(15px,1.6vw,19px);color:var(--brown-mid);text-align:center">год, калі бульба з'явілася на землях Беларусі</p>
+  <!-- Baroque plate + candle -->
+  <div class="rv d2" style="display:flex;justify-content:center"><svg class="idle-breathe" viewBox="0 0 380 260" fill="none" style="width:clamp(220px,36vw,420px)">
+    <!-- table shadow -->
+    <ellipse cx="190" cy="250" rx="150" ry="10" fill="#5C3A1E" opacity=".1"/>
+    <!-- plate shadow -->
+    <ellipse cx="160" cy="238" rx="98" ry="10" fill="#5C3A1E" opacity=".14"/>
+    <!-- plate base -->
+    <ellipse cx="160" cy="220" rx="96" ry="22" fill="#E8D4B0"/>
+    <!-- plate rim detailed -->
+    <ellipse cx="160" cy="218" rx="96" ry="22" fill="none" stroke="#C9960C" stroke-width="3.5" opacity=".6"/>
+    <ellipse cx="160" cy="218" rx="86" ry="18" fill="none" stroke="#C9960C" stroke-width="1.5" opacity=".35"/>
+    <!-- plate body -->
+    <ellipse cx="160" cy="208" rx="88" ry="20" fill="#F5EDD8"/>
+    <!-- decorative rim motifs -->
+    <ellipse cx="160" cy="208" rx="88" ry="20" fill="none" stroke="#C9960C" stroke-width="1" stroke-dasharray="8 6" opacity=".4"/>
+    <!-- potato ON plate - volumetric -->
+    <ellipse cx="160" cy="200" rx="54" ry="38" fill="#B8864E"/>
+    <ellipse cx="160" cy="200" rx="48" ry="32" fill="#C8964E" opacity=".65"/>
+    <ellipse cx="138" cy="180" rx="28" ry="18" fill="#D4A870" opacity=".5"/>
+    <ellipse cx="142" cy="202" rx="9" ry="5" fill="#9A6B35" opacity=".22" transform="rotate(-15,142,202)"/>
+    <ellipse cx="178" cy="193" rx="8" ry="4.5" fill="#9A6B35" opacity=".2" transform="rotate(12,178,193)"/>
+    <ellipse cx="190" cy="214" rx="54" ry="18" fill="#7A4F2D" opacity=".28"/>
+    <!-- tiny sprout on plate potato -->
+    <path d="M147 183 C144 174 143 164 145 156" stroke="#6B8F3E" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <ellipse cx="143" cy="152" rx="6" ry="9" fill="#6B8F3E" opacity=".8" transform="rotate(-12,143,152)"/>
+    <!-- Candle -->
+    <rect x="282" y="138" width="22" height="72" rx="4" fill="#F5EDD8" stroke="#E8D0A8" stroke-width="1.5"/>
+    <!-- wax drip -->
+    <path d="M282 155 C278 165 276 175 280 185" stroke="#F5EDD8" stroke-width="3" fill="none" stroke-linecap="round" opacity=".7"/>
+    <!-- wick -->
+    <line x1="293" y1="138" x2="293" y2="130" stroke="#3D2008" stroke-width="1.5" stroke-linecap="round"/>
+    <!-- flame -->
+    <ellipse cx="293" cy="122" rx="7" ry="12" fill="#FFD080" opacity=".9"/>
+    <ellipse cx="293" cy="118" rx="4" ry="8" fill="#FFA030" opacity=".8"/>
+    <ellipse cx="293" cy="115" rx="2.5" ry="5" fill="white" opacity=".6"/>
+    <!-- flame glow -->
+    <ellipse cx="293" cy="122" rx="16" ry="20" fill="#FFD080" opacity=".15"/>
+    <!-- candle shadow -->
+    <ellipse cx="293" cy="212" rx="14" ry="4" fill="#5C3A1E" opacity=".12"/>
+  </svg>
+  </svg></div>
+  <p class="body rv d3">Чашнік ВКЛ Франтышак Сапега прывёз яе з Еўропы. Спачатку — далікатэс для магнатаў. Праз стагоддзе — ежа ўсёй краіны.</p>
+</section>
+
+<!-- ══════════════ S4 — TOMATO ANCESTOR ══════════════ -->
+<section id="s4">
+  <div class="wow wow-xxl rv" style="line-height:.92">БУЛЬБА —<br>НАШЧАДАК<br>ПАМІДОРА</div>
+  <div class="rv d1" style="display:flex;align-items:center;gap:clamp(10px,2vw,28px);flex-wrap:wrap;justify-content:center;" id="merge-row">
+    <!-- Tomato cluster (volumetric) -->
+    <svg class="idle-breathe" viewBox="0 0 130 140" fill="none" style="width:clamp(70px,11vw,120px)">
+      <ellipse cx="65" cy="128" rx="44" ry="7" fill="#5C3A1E" opacity=".1"/>
+      <ellipse cx="65" cy="92" rx="46" ry="38" fill="#A02820"/>
+      <ellipse cx="65" cy="92" rx="40" ry="32" fill="#C0392B" opacity=".75"/>
+      <ellipse cx="46" cy="72" rx="22" ry="15" fill="#E8715A" opacity=".52"/>
+      <ellipse cx="48" cy="88" rx="7" ry="4" fill="#7A1F0F" opacity=".2" transform="rotate(-10,48,88)"/>
+      <ellipse cx="80" cy="100" rx="8" ry="4.5" fill="#7A1F0F" opacity=".18" transform="rotate(8,80,100)"/>
+      <ellipse cx="82" cy="112" rx="44" ry="14" fill="#7A1F0F" opacity=".3"/>
+      <!-- calyx -->
+      <path d="M65 54 C58 48 52 42 52 36" stroke="#6B8F3E" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <ellipse cx="50" cy="33" rx="8" ry="5" fill="#6B8F3E" transform="rotate(-30,50,33)"/>
+      <path d="M65 54 C70 46 74 40 76 34" stroke="#6B8F3E" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <ellipse cx="77" cy="31" rx="7" ry="4.5" fill="#6B8F3E" transform="rotate(20,77,31)"/>
+      <path d="M65 54 C65 46 65 40 65 34" stroke="#6B8F3E" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+      <ellipse cx="65" cy="30" rx="5" ry="8" fill="#6B8F3E"/>
+      <!-- small second tomato -->
+      <ellipse cx="100" cy="106" rx="24" ry="20" fill="#A02820"/>
+      <ellipse cx="100" cy="106" rx="20" ry="16" fill="#C0392B" opacity=".7"/>
+      <ellipse cx="90" cy="96" rx="10" ry="7" fill="#E8715A" opacity=".45"/>
+    </svg>
+    <span class="wow" style="font-size:clamp(28px,5vw,56px);color:var(--terra);" id="m-cross">×</span>
+    <!-- Mystery plant -->
+    <svg viewBox="0 0 110 140" fill="none" style="width:clamp(60px,9vw,100px)">
+      <path d="M55 130 C55 115 48 98 44 80" stroke="#6B8F3E" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+      <ellipse cx="36" cy="72" rx="18" ry="11" fill="#6B8F3E" opacity=".85" transform="rotate(-38,36,72)"/>
+      <ellipse cx="30" cy="64" rx="10" ry="7" fill="#A8C87A" opacity=".6" transform="rotate(-38,30,64)"/>
+      <path d="M55 130 C55 110 64 94 70 76" stroke="#6B8F3E" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <ellipse cx="78" cy="68" rx="16" ry="10" fill="#6B8F3E" opacity=".8" transform="rotate(32,78,68)"/>
+      <ellipse cx="85" cy="60" rx="9" ry="6" fill="#A8C87A" opacity=".55" transform="rotate(32,85,60)"/>
+      <text x="55" y="140" text-anchor="middle" font-family="Manrope" font-size="9" fill="#8B6B4A">Etuberosum</text>
+    </svg>
+    <span class="wow" style="font-size:clamp(28px,5vw,56px);color:var(--terra);" id="m-arrow">→</span>
+    <!-- Potato result -->
+    <svg class="idle-breathe" id="m-result" viewBox="0 0 120 100" fill="none" style="width:clamp(70px,11vw,120px);opacity:0;transform:scale(.4);transition:opacity .7s 1.2s, transform .7s 1.2s cubic-bezier(.34,1.56,.64,1)">
+      <ellipse cx="60" cy="90" rx="44" ry="7" fill="#5C3A1E" opacity=".1"/>
+      <ellipse cx="60" cy="58" rx="50" ry="34" fill="#B8864E"/>
+      <ellipse cx="60" cy="58" rx="44" ry="28" fill="#C8964E" opacity=".65"/>
+      <ellipse cx="42" cy="40" rx="26" ry="16" fill="#D4A870" opacity=".5"/>
+      <ellipse cx="50" cy="60" rx="8" ry="4.5" fill="#9A6B35" opacity=".2" transform="rotate(-12,50,60)"/>
+      <ellipse cx="76" cy="54" rx="7" ry="4" fill="#9A6B35" opacity=".18" transform="rotate(10,76,54)"/>
+      <ellipse cx="80" cy="72" rx="50" ry="14" fill="#7A4F2D" opacity=".28"/>
+      <circle cx="48" cy="52" r="3.5" fill="#8B5E28"/>
+      <circle cx="72" cy="46" r="3" fill="#8B5E28"/>
+      <path d="M46 49 C43 40 42 30 44 22" stroke="#6B8F3E" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <ellipse cx="42" cy="18" rx="6" ry="9" fill="#6B8F3E" opacity=".85" transform="rotate(-15,42,18)"/>
+    </svg>
+  </div>
+  <p class="body rv d2">Каля 9 мільёнаў гадоў таму дзікая таматападобная расліна скрыжавалася з відам Etuberosum — і з'явіліся першыя клубні. Адкрыццё 2025 года.</p>
+</section>
+
+<!-- ══════════════ S5 — 4000+ VARIETIES ══════════════ -->
+<section id="s5">
+  <div class="wow wow-xl wow-terra rv" id="var-n">0</div>
+  <p class="wow rv d1" style="font-size:clamp(14px,2.2vw,26px);color:var(--brown-mid);margin-top:-6px;">гатункаў бульбы ў свеце</p>
+  <div class="vgrid rv d2" id="vgrid"></div>
+  <p class="body rv d3">ад бледна-жоўтай да цёмна-фіялетавай. Большасць з іх — у Андах, дзе ўсё і пачалося.</p>
+</section>
+
+<!-- ══════════════ S6 — 160 COUNTRIES ══════════════ -->
+<section id="s6">
+  <div class="wow wow-xl wow-terra rv" id="ctr-n">0</div>
+  <p class="wow rv d1" style="font-size:clamp(14px,2.2vw,26px);color:var(--brown-mid);margin-top:-6px;">краін вырошчваюць бульбу</p>
+  <svg class="rv d2" viewBox="0 0 600 310" fill="none" style="width:clamp(280px,54vw,580px)">
+    <!-- Continents simplified -->
+    <path d="M80 60 C75 50 92 38 112 42 C138 48 155 62 160 82 C165 102 155 128 140 142 C125 156 100 160 82 148 C64 136 56 110 58 88 C60 72 72 66 80 60Z" fill="#D4B896" opacity=".55"/>
+    <path d="M110 170 C106 158 122 148 138 152 C154 156 164 172 162 192 C160 212 148 230 132 236 C116 242 100 230 96 212 C92 194 106 180 110 170Z" fill="#D4B896" opacity=".55"/>
+    <path d="M242 48 C248 38 266 32 282 36 C300 40 310 56 308 72 C306 88 294 100 278 104 C262 108 244 98 240 80 C236 66 238 56 242 48Z" fill="#D4B896" opacity=".55"/>
+    <path d="M246 114 C252 104 270 98 288 104 C308 110 318 130 316 152 C314 174 300 196 282 204 C264 212 244 202 238 184 C232 166 234 144 240 130 C242 122 244 118 246 114Z" fill="#D4B896" opacity=".55"/>
+    <path d="M320 42 C330 30 375 26 415 32 C460 38 495 56 500 80 C505 104 488 128 460 136 C432 144 385 138 355 124 C325 110 308 84 314 62 C316 52 318 46 320 42Z" fill="#D4B896" opacity=".55"/>
+    <path d="M448 185 C455 175 476 172 494 178 C514 186 524 202 520 220 C516 238 500 250 482 248 C464 246 450 230 448 212 C446 200 446 192 448 185Z" fill="#D4B896" opacity=".55"/>
+    <path d="M525 80 C532 72 550 68 562 74 C576 80 580 96 574 110 C568 124 552 130 538 126 C524 122 516 106 520 92 C522 86 524 82 525 80Z" fill="#D4B896" opacity=".55"/>
+    <g id="cdots"></g>
+  </svg>
+  <p class="body rv d3">Бульбу вырошчваюць у 160 краінах свету — больш, чым любую іншую гародніну.</p>
+</section>
+
+<!-- ══════════════ S7 — BILLION ══════════════ -->
+<section id="billion">
+  <div class="wow-cream rv" id="billion-num" style="font-family:'Unbounded',sans-serif;font-weight:900;font-size:clamp(36px,9.5vw,124px);letter-spacing:-.03em;text-align:center;color:var(--cream)">0</div>
+  <p class="rv d1" style="font-family:'Manrope',sans-serif;font-weight:500;font-size:clamp(17px,2vw,24px);color:rgba(251,248,242,.85);text-align:center;margin-top:12px">чалавек ядуць бульбу кожны дзень</p>
+</section>
+
+<!-- ══════════════ S8 — BELARUS LEADER ══════════════ -->
+<section id="s8">
+  <div class="wow wow-xxl wow-terra rv" style="line-height:.92">БЕЛАРУСЬ —<br>СУСВЕТНЫ<br>ЛІДАР</div>
+  <p class="rv d1" style="font-family:'Manrope',sans-serif;font-weight:600;font-size:clamp(15px,1.5vw,19px);color:var(--brown-mid);text-align:center">па спажыванні бульбы на душу насельніцтва</p>
+  <div class="bars rv d2" id="bar-chart">
+    <div class="bar-item">
+      <div class="bar" style="height:clamp(110px,19vw,196px);background:var(--terra);transition-delay:.1s"></div>
+      <span class="bar-lbl">170 кг</span>
+      <span class="bar-sub">Беларусь</span>
+    </div>
+    <div class="bar-item">
+      <div class="bar" style="height:clamp(24px,4vw,42px);background:#D4C4B0;transition-delay:.4s"></div>
+      <span class="bar-lbl">37 кг</span>
+      <span class="bar-sub">Сусветны сярэдні</span>
+    </div>
+  </div>
+  <p class="body rv d3">Гэта 465 грамаў бульбы кожны дзень. Сусветны сярэдні — 37 кг на год.</p>
+</section>
+
+<!-- ══════════════ S9 — 300+ DISHES ══════════════ -->
+<section id="s9">
+  <div class="wow wow-xl wow-terra rv" id="dish-n">0</div>
+  <p class="wow rv d1" style="font-size:clamp(14px,2.2vw,26px);color:var(--brown-mid);margin-top:-6px;">страў з бульбы ў беларускай кухні</p>
+  <div class="rcards rv d2" id="rcards">
+    <!-- Dranik -->
+    <div class="rcard">
+      <svg viewBox="0 0 80 60" fill="none" style="width:54px">
+        <ellipse cx="40" cy="35" rx="34" ry="20" fill="#B8864E" opacity=".9"/>
+        <ellipse cx="40" cy="32" rx="28" ry="14" fill="#D4A254" opacity=".7"/>
+        <ellipse cx="30" cy="26" rx="14" ry="7" fill="#E8C070" opacity=".5"/>
+        <ellipse cx="44" cy="38" rx="9" ry="5" fill="#9A6B35" opacity=".2" transform="rotate(8,44,38)"/>
+      </svg>
+      Дранік
+    </div>
+    <!-- Babka -->
+    <div class="rcard">
+      <svg viewBox="0 0 80 80" fill="none" style="width:54px">
+        <ellipse cx="40" cy="68" rx="32" ry="8" fill="#5C3A1E" opacity=".1"/>
+        <rect x="10" y="32" width="60" height="36" rx="6" fill="#B8864E"/>
+        <rect x="12" y="32" width="56" height="28" rx="5" fill="#C8964E" opacity=".65"/>
+        <ellipse cx="40" cy="32" rx="28" ry="10" fill="#D4A870"/>
+        <ellipse cx="28" cy="28" rx="14" ry="6" fill="#E8C070" opacity=".5"/>
+        <ellipse cx="44" cy="42" rx="10" ry="5" fill="#9A6B35" opacity=".18" transform="rotate(5,44,42)"/>
+        <ellipse cx="50" cy="58" rx="30" ry="10" fill="#7A4F2D" opacity=".22"/>
+      </svg>
+      Бабка
+    </div>
+    <!-- Kalduny -->
+    <div class="rcard">
+      <svg viewBox="0 0 80 70" fill="none" style="width:54px">
+        <ellipse cx="40" cy="62" rx="30" ry="6" fill="#5C3A1E" opacity=".1"/>
+        <ellipse cx="40" cy="44" rx="32" ry="20" fill="#7A9E5E"/>
+        <ellipse cx="40" cy="42" rx="26" ry="15" fill="#8AAF6E" opacity=".7"/>
+        <ellipse cx="30" cy="35" rx="12" ry="7" fill="#A8C87A" opacity=".5"/>
+        <ellipse cx="48" cy="50" rx="30" ry="8" fill="#5A7040" opacity=".25"/>
+        <ellipse cx="40" cy="40" rx="12" ry="8" fill="#B8864E" opacity=".8"/>
+        <ellipse cx="36" cy="38" rx="6" ry="4" fill="#D4A870" opacity=".5"/>
+      </svg>
+      Калдуны
+    </div>
+    <!-- Kletski -->
+    <div class="rcard">
+      <svg viewBox="0 0 80 70" fill="none" style="width:54px">
+        <ellipse cx="40" cy="62" rx="28" ry="6" fill="#5C3A1E" opacity=".1"/>
+        <ellipse cx="40" cy="46" rx="28" ry="16" fill="#B8864E"/>
+        <ellipse cx="40" cy="43" rx="22" ry="11" fill="#C8964E" opacity=".65"/>
+        <ellipse cx="32" cy="38" rx="10" ry="6" fill="#D4A870" opacity=".5"/>
+        <ellipse cx="50" cy="54" rx="28" ry="7" fill="#7A4F2D" opacity=".24"/>
+        <!-- 2nd dumpling -->
+        <ellipse cx="55" cy="36" rx="18" ry="12" fill="#B8864E" opacity=".85"/>
+        <ellipse cx="50" cy="33" rx="10" ry="6" fill="#D4A870" opacity=".4"/>
+      </svg>
+      Клёцкі
+    </div>
+  </div>
+  <p class="body rv d3">Ніводная іншая гародніна не займае такога месца ў нацыянальнай гастраноміі.</p>
+</section>
+
+<!-- ══════════════ S10 — VODKA ══════════════ -->
+<section id="s10">
+  <div class="wow wow-xxl rv" style="line-height:.92">ГАРЭЛКА<br>З БУЛЬБЫ</div>
+  <div class="rv d1" style="display:flex;justify-content:center"><svg class="idle-sway" viewBox="0 0 120 260" fill="none" style="width:clamp(80px,12vw,130px)">
+    <!-- shadow -->
+    <ellipse cx="60" cy="254" rx="36" ry="6" fill="#5C3A1E" opacity=".1"/>
+    <!-- bottle body -->
+    <path d="M28 120 C22 120 16 132 14 152 L14 222 C14 232 20 240 28 240 L92 240 C100 240 106 232 106 222 L106 152 C104 132 98 120 92 120Z" fill="#A8C890" opacity=".82"/>
+    <!-- bottle glass highlight -->
+    <path d="M22 135 C18 148 17 165 18 185" stroke="white" stroke-width="4" stroke-linecap="round" opacity=".3"/>
+    <!-- bottle interior liquid -->
+    <path d="M30 128 C24 128 20 140 19 158 L19 218 C19 226 24 232 30 232 L90 232 C96 232 101 226 101 218 L101 158 C100 140 96 128 90 128Z" fill="#C8E8A0" opacity=".5"/>
+    <!-- neck -->
+    <rect x="44" y="62" width="32" height="62" rx="6" fill="#A8C890" opacity=".82"/>
+    <rect x="48" y="62" width="24" height="52" rx="4" fill="#C8E8A0" opacity=".4"/>
+    <!-- cap -->
+    <rect x="42" y="48" width="36" height="18" rx="5" fill="#6B8B50"/>
+    <rect x="44" y="44" width="32" height="8" rx="3" fill="#8BAF6A"/>
+    <!-- label -->
+    <rect x="22" y="148" width="76" height="68" rx="8" fill="#FBF8F2" opacity=".9"/>
+    <rect x="26" y="152" width="68" height="60" rx="6" fill="none" stroke="#C9960C" stroke-width="1.5" opacity=".5"/>
+    <!-- potato sketch on label -->
+    <ellipse cx="60" cy="170" rx="18" ry="12" fill="#B8864E" opacity=".7"/>
+    <ellipse cx="52" cy="165" rx="8" ry="5" fill="#D4A870" opacity=".5"/>
+    <text x="60" y="192" text-anchor="middle" font-family="Unbounded,sans-serif" font-weight="900" font-size="8" fill="#3D2008">БУЛЬБЯНАЯ</text>
+    <text x="60" y="204" text-anchor="middle" font-family="Manrope,sans-serif" font-size="7" fill="#8B6B4A">XIX ст.</text>
+  </svg>
+  </svg></div>
+  <p class="body rv d2">У XIX стагоддзі бульбяная гарэлка выціснула збожжавую па ўсёй Беларусі — бульба была проста танней.</p>
+</section>
+
+<!-- ══════════════ S11 — 80% WATER ══════════════ -->
+<section id="s11">
+  <div class="wow wow-xl wow-terra rv" id="water-n">0%</div>
+  <p class="rv d1" style="font-family:'Manrope',sans-serif;font-weight:600;font-size:clamp(15px,1.6vw,20px);color:var(--brown-mid);text-align:center">вады ўнутры адной бульбіны</p>
+  <div class="rv d2" style="display:flex;justify-content:center"><svg class="idle-breathe" viewBox="0 0 280 220" fill="none" style="width:clamp(180px,30vw,320px)">
+    <!-- cast shadow -->
+    <ellipse cx="140" cy="212" rx="100" ry="8" fill="#5C3A1E" opacity=".1"/>
+    <!-- potato half outline -->
+    <ellipse cx="140" cy="125" rx="110" ry="80" fill="#B8864E"/>
+    <ellipse cx="140" cy="125" rx="100" ry="70" fill="#C8964E" opacity=".5"/>
+    <!-- cut face (inner flesh) -->
+    <ellipse cx="140" cy="125" rx="92" ry="64" fill="#F5DFA0"/>
+    <!-- ring patterns -->
+    <ellipse cx="140" cy="125" rx="72" ry="50" fill="none" stroke="#E8C870" stroke-width="1.5" opacity=".5"/>
+    <ellipse cx="140" cy="125" rx="50" ry="34" fill="none" stroke="#E8C870" stroke-width="1" opacity=".4"/>
+    <ellipse cx="140" cy="125" rx="28" ry="18" fill="none" stroke="#E8C870" stroke-width="1" opacity=".3"/>
+    <circle cx="140" cy="125" r="10" fill="#E8A830" opacity=".6"/>
+    <!-- water fill (clips to inner flesh shape) -->
+    <clipPath id="pc"><ellipse cx="140" cy="125" rx="92" ry="64"/></clipPath>
+    <rect id="wfill" x="48" y="61" width="184" height="128" fill="#7AB8D8" opacity=".55" clip-path="url(#pc)"/>
+    <!-- outer skin tone on top -->
+    <ellipse cx="140" cy="125" rx="110" ry="80" fill="none" stroke="#B8864E" stroke-width="3"/>
+    <!-- highlight on skin -->
+    <ellipse cx="100" cy="90" rx="36" ry="20" fill="#D4A870" opacity=".35" transform="rotate(-18,100,90)"/>
+    <ellipse cx="170" cy="200" rx="110" ry="22" fill="#7A4F2D" opacity=".2"/>
+    <!-- 80% label -->
+    <text id="water-pct" x="140" y="132" text-anchor="middle" font-family="Unbounded,sans-serif" font-weight="900" font-size="28" fill="#2A5F8F" opacity="0">80%</text>
+  </svg>
+  </svg></div>
+  <p class="body rv d3">Але ўсё роўна ~100 ккал і амаль паўсутачная норма вітаміну C.</p>
+</section>
+
+<!-- ══════════════ S12 — CHROMOSOMES ══════════════ -->
+<section id="s12">
+  <div class="wow wow-xxl wow-terra rv" style="line-height:.92">У 2 РАЗЫ<br>БОЛЬШ<br>ХРАМАСОМ</div>
+  <div class="rv d1" style="display:flex;gap:clamp(32px,7vw,80px);align-items:flex-end;" id="chrom-wrap">
+    <!-- Human -->
+    <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+      <svg viewBox="0 0 60 90" fill="none" style="width:clamp(36px,5.5vw,56px)">
+        <path d="M30 8 C22 8 16 16 16 26 L16 52 C16 62 22 70 30 70 C38 70 44 62 44 52 L44 26 C44 16 38 8 30 8Z" fill="#C8581A" opacity=".4" stroke="#C8581A" stroke-width="1.5"/>
+        <line x1="30" y1="52" x2="30" y2="82" stroke="#C8581A" stroke-width="2" stroke-linecap="round" opacity=".35"/>
+        <line x1="16" y1="60" x2="8" y2="78" stroke="#C8581A" stroke-width="1.5" stroke-linecap="round" opacity=".35"/>
+        <line x1="44" y1="60" x2="52" y2="78" stroke="#C8581A" stroke-width="1.5" stroke-linecap="round" opacity=".35"/>
+      </svg>
+      <div style="display:flex;gap:5px;align-items:flex-end" id="hbars"></div>
+      <span style="font-family:'Unbounded',sans-serif;font-weight:900;font-size:clamp(11px,1.5vw,15px);color:var(--brown);text-align:center">Чалавек<br><span style="font-family:Manrope;font-weight:400;font-size:.8em">2 наборы</span></span>
+    </div>
+    <!-- Potato -->
+    <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+      <svg viewBox="0 0 80 60" fill="none" style="width:clamp(42px,6.5vw,66px)">
+        <ellipse cx="40" cy="35" rx="34" ry="24" fill="#B8864E"/>
+        <ellipse cx="40" cy="33" rx="28" ry="18" fill="#D4A870" opacity=".55"/>
+        <circle cx="28" cy="30" r="3" fill="#8B5E28" opacity=".7"/>
+        <circle cx="52" cy="26" r="2.5" fill="#8B5E28" opacity=".6"/>
+        <ellipse cx="50" cy="46" rx="34" ry="8" fill="#7A4F2D" opacity=".22"/>
+      </svg>
+      <div style="display:flex;gap:5px;align-items:flex-end" id="pbars"></div>
+      <span style="font-family:'Unbounded',sans-serif;font-weight:900;font-size:clamp(11px,1.5vw,15px);color:var(--brown);text-align:center">Бульба<br><span style="font-family:Manrope;font-weight:400;font-size:.8em">4 наборы</span></span>
+    </div>
+  </div>
+  <p class="body rv d2">Менавіта таму вывядзенне новага гатунку займае дзесяцігоддзі.</p>
+</section>
+
+<!-- ══════════════ S13 — €500/kg ══════════════ -->
+<section id="s13">
+  <div class="wow wow-xl wow-gold rv">€500 / кг</div>
+  <!-- Golden potato + price tag -->
+  <div class="rv d1" style="display:flex;align-items:center;gap:clamp(16px,3vw,40px);flex-wrap:wrap;justify-content:center">
+    <svg class="idle-breathe" viewBox="0 0 260 200" fill="none" style="width:clamp(160px,26vw,280px)">
+      <ellipse cx="130" cy="188" rx="90" ry="8" fill="#5C3A1E" opacity=".1"/>
+      <ellipse cx="130" cy="118" rx="96" ry="66" fill="#A87828"/>
+      <ellipse cx="130" cy="118" rx="86" ry="56" fill="#C8A050" opacity=".75"/>
+      <ellipse cx="100" cy="90" rx="52" ry="32" fill="#E8C878" opacity=".55"/>
+      <ellipse cx="108" cy="118" rx="13" ry="7" fill="#8B6020" opacity=".2" transform="rotate(-12,108,118)"/>
+      <ellipse cx="158" cy="106" rx="11" ry="6" fill="#8B6020" opacity=".18" transform="rotate(10,158,106)"/>
+      <ellipse cx="148" cy="140" rx="14" ry="7" fill="#8B6020" opacity=".16" transform="rotate(-6,148,140)"/>
+      <ellipse cx="168" cy="152" rx="96" ry="24" fill="#6B4010" opacity=".28"/>
+      <circle cx="110" cy="110" r="5" fill="#8B6020" opacity=".6"/>
+      <circle cx="152" cy="100" r="4" fill="#8B6020" opacity=".55"/>
+      <!-- tiny sprout -->
+      <path d="M108 106 C104 95 104 82 107 72" stroke="#6B8F3E" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+      <ellipse cx="105" cy="68" rx="7" ry="10" fill="#6B8F3E" opacity=".85" transform="rotate(-12,105,68)"/>
+    </svg>
+    <!-- Price tag swinging -->
+    <svg class="idle-sway" viewBox="0 0 90 130" fill="none" style="width:clamp(64px,9vw,100px)">
+      <line x1="45" y1="0" x2="45" y2="20" stroke="#8B6B4A" stroke-width="1.5" stroke-dasharray="3 3"/>
+      <rect x="8" y="20" width="74" height="100" rx="10" fill="#FBF0DC" stroke="#C9960C" stroke-width="2.5"/>
+      <rect x="12" y="24" width="66" height="92" rx="8" fill="none" stroke="#C9960C" stroke-width="1" opacity=".4" stroke-dasharray="5 4"/>
+      <circle cx="45" cy="15" r="7" fill="none" stroke="#8B6B4A" stroke-width="2"/>
+      <text x="45" y="72" text-anchor="middle" font-family="Unbounded,sans-serif" font-weight="900" font-size="16" fill="#C9960C">€500</text>
+      <line x1="18" y1="82" x2="72" y2="82" stroke="#E8D9C0" stroke-width="1"/>
+      <text x="45" y="97" text-anchor="middle" font-family="Manrope,sans-serif" font-size="8" fill="#8B6B4A" font-weight="500">La Bonnotte</text>
+      <text x="45" y="109" text-anchor="middle" font-family="Manrope,sans-serif" font-size="7" fill="#B8A080">Noirmoutier</text>
+    </svg>
+  </div>
+  <p class="body rv d2">Гатунак La Bonnotte з вострава Нуармуцье. Збіраюць уручную адзін тыдзень на год, угнойваюць марскімі водарасцямі.</p>
+</section>
+
+<!-- ══════════════ S14 — 7.9 KG DUG ══════════════ -->
+<section id="s14">
+  <div class="wow wow-xl wow-terra rv">7,9 кг</div>
+  <p class="wow rv d1" style="font-size:clamp(14px,2.2vw,26px);color:var(--brown-mid);margin-top:-6px;">найбуйнейшая бульбіна ў гісторыі</p>
+  <div class="rv d2" style="display:flex;justify-content:center"><svg class="idle-breathe" viewBox="0 0 380 240" fill="none" style="width:clamp(240px,44vw,440px)">
+    <ellipse cx="166" cy="148" rx="130" ry="90" fill="#B8864E"/>
+    <ellipse cx="166" cy="148" rx="118" ry="78" fill="#C8964E" opacity=".65"/>
+    <ellipse cx="120" cy="106" rx="70" ry="44" fill="#D4A870" opacity=".5"/>
+    <ellipse cx="130" cy="150" rx="18" ry="10" fill="#9A6B35" opacity=".2" transform="rotate(-15,130,150)"/>
+    <ellipse cx="204" cy="136" rx="16" ry="9" fill="#9A6B35" opacity=".18" transform="rotate(12,204,136)"/>
+    <ellipse cx="190" cy="178" rx="20" ry="10" fill="#9A6B35" opacity=".16" transform="rotate(-8,190,178)"/>
+    <ellipse cx="230" cy="196" rx="130" ry="28" fill="#7A4F2D" opacity=".26"/>
+    <text x="164" y="156" text-anchor="middle" font-family="Unbounded,sans-serif" font-weight="900" font-size="22" fill="#8B5E28" opacity=".45">Dug</text>
+    <!-- scale label -->
+    <text x="210" y="86" text-anchor="middle" font-family="Manrope,sans-serif" font-size="11" fill="#8B6B4A">× 12 больш за звычайную</text>
+    <line x1="166" y1="90" x2="290" y2="60" stroke="#C8581A" stroke-width="1" stroke-dasharray="4 3" opacity=".5"/>
+    <!-- tiny human hand -->
+    <g transform="translate(302,120)">
+      <ellipse cx="28" cy="90" rx="24" ry="5" fill="#5C3A1E" opacity=".08"/>
+      <!-- palm -->
+      <path d="M10 72 L10 44 C10 40 13 38 16 38 L16 24 C16 21 18 19 21 19 C24 19 26 21 26 24 L26 30 C27 28 30 27 33 28 C36 29 36 33 36 36 L36 42 C38 40 41 40 43 42 C45 44 44 48 44 52 L44 64 C44 70 41 76 36 79 L36 82 L10 82Z" fill="#E8C8A0"/>
+      <path d="M10 72 L10 44 C10 40 13 38 16 38 L16 24 C16 21 18 19 21 19 C24 19 26 21 26 24 L26 30 C27 28 30 27 33 28 C36 29 36 33 36 36 L36 42 C38 40 41 40 43 42 C45 44 44 48 44 52 L44 64 C44 70 41 76 36 79 L36 82 L10 82Z" fill="none" stroke="#C8A070" stroke-width="1.5"/>
+      <!-- finger lines -->
+      <line x1="16" y1="38" x2="16" y2="28" stroke="#C8A070" stroke-width="1" opacity=".4"/>
+      <line x1="26" y1="30" x2="26" y2="24" stroke="#C8A070" stroke-width="1" opacity=".4"/>
+      <line x1="36" y1="36" x2="36" y2="28" stroke="#C8A070" stroke-width="1" opacity=".4"/>
+    </g>
+  </svg>
+  </svg></div>
+  <p class="body rv d3">У 2021 годзе новазеландцы Колін і Дона Крэйг-Браўн знайшлі ў агародзе бульбіну вагой 7,9 кг. Назвалі яе Dug. Гінес запатрабаваў ДНК-тэст.</p>
+</section>
+
+<!-- ══════════════ S15 — SPACE ══════════════ -->
+<section id="s15" style="background:#F5F0E8 !important">
+  <!-- star field via svg -->
+  <svg class="star-field" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice">
+    <g id="sdots"></g>
+  </svg>
+  <div class="wow wow-xxl rv" style="line-height:.92;position:relative;z-index:1">ПЕРШАЯ<br>ГАРОДНІНА<br>Ў КОСМАСЕ</div>
+  <!-- Rocket launching -->
+  <div class="rv d1" style="position:relative;z-index:1;display:flex;align-items:flex-end;justify-content:center;gap:clamp(20px,4vw,60px)">
+    <svg id="rocket-svg" viewBox="0 0 80 160" fill="none" style="width:clamp(52px,8vw,88px);transform:translateY(60px);opacity:0;transition:transform 1.2s ease,opacity .7s ease">
+      <path d="M40 12 C30 12 20 32 20 58 L20 108 L60 108 L60 58 C60 32 50 12 40 12Z" fill="#C8581A"/>
+      <path d="M40 12 C38 28 37 50 37 72 L43 72 C43 50 42 28 40 12Z" fill="#E8845A" opacity=".45"/>
+      <path d="M40 6 C34 10 28 18 28 24 L52 24 C52 18 46 10 40 6Z" fill="#8B3A10"/>
+      <ellipse cx="40" cy="64" rx="10" ry="10" fill="#B8D4BB"/>
+      <ellipse cx="40" cy="64" rx="6" ry="6" fill="#7A9E5E"/>
+      <ellipse cx="37" cy="61" rx="3" ry="2" fill="#D4962A" opacity=".8"/>
+      <path d="M20 85 L6 108 L20 108Z" fill="#8B3A10"/>
+      <path d="M60 85 L74 108 L60 108Z" fill="#8B3A10"/>
+      <path d="M27 108 C29 124 35 136 40 144 C45 136 51 124 53 108Z" fill="#E8845A" opacity=".8"/>
+      <path d="M32 108 C33 120 37 130 40 138 C43 130 47 120 48 108Z" fill="#FFD080" opacity=".9"/>
+    </svg>
+  </div>
+    <!-- glow -->
+    <div style="position:absolute;width:clamp(140px,22vw,240px);height:clamp(140px,22vw,240px);border-radius:50%;background:radial-gradient(circle,rgba(200,120,26,.25) 0%,transparent 70%);pointer-events:none"></div>
+    <svg id="space-pot" viewBox="0 0 240 180" fill="none" style="width:clamp(140px,22vw,240px)">
+      <ellipse cx="120" cy="160" rx="70" ry="8" fill="#5C3A1E" opacity=".08"/>
+      <ellipse cx="120" cy="100" rx="88" ry="64" fill="#B8864E"/>
+      <ellipse cx="120" cy="100" rx="78" ry="54" fill="#C8964E" opacity=".65"/>
+      <ellipse cx="92" cy="72" rx="48" ry="30" fill="#D4A870" opacity=".52"/>
+      <ellipse cx="98" cy="102" rx="13" ry="7" fill="#9A6B35" opacity=".2" transform="rotate(-14,98,102)"/>
+      <ellipse cx="148" cy="92" rx="11" ry="6" fill="#9A6B35" opacity=".18" transform="rotate(10,148,92)"/>
+      <ellipse cx="158" cy="126" rx="88" ry="22" fill="#7A4F2D" opacity=".26"/>
+      <circle cx="100" cy="94" r="4.5" fill="#8B5E28" opacity=".6"/>
+      <circle cx="142" cy="84" r="3.5" fill="#8B5E28" opacity=".55"/>
+      <!-- sprouts floating -->
+      <path d="M98 90 C92 78 90 62 93 50" stroke="#6B8F3E" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <ellipse cx="91" cy="44" rx="9" ry="13" fill="#6B8F3E" opacity=".85" transform="rotate(-15,91,44)"/>
+      <ellipse cx="100" cy="38" rx="6" ry="9" fill="#8AAF5A" opacity=".7" transform="rotate(10,100,38)"/>
+    </svg>
+  </div>
+  <p class="body rv d2" style="position:relative;z-index:1">1995 год. NASA і Універсітэт Вісконсіна. Шатл Columbia.</p>
+</section>
+
+<!-- ══════════════ S16 — DEARER THAN GOLD ══════════════ -->
+<section id="s16">
+  <div class="wow wow-xxl rv" style="line-height:.92">ДАРАЖЭЙ<br>ЗА ЗОЛАТА</div>
+  <!-- Balance scale -->
+  <div class="rv d1" style="display:flex;justify-content:center"><svg id="scale-svg" viewBox="0 0 380 240" fill="none" style="width:clamp(240px,44vw,440px)">
+    <!-- base -->
+    <rect x="168" y="210" width="44" height="24" rx="6" fill="#C9960C"/>
+    <rect x="148" y="230" width="84" height="8" rx="4" fill="#A87828"/>
+    <!-- pole -->
+    <rect x="186" y="88" width="8" height="126" rx="4" fill="#C9960C"/>
+    <!-- beam group (will be tipped) -->
+    <g id="scale-beam">
+      <rect x="54" y="84" width="272" height="8" rx="4" fill="#A87828"/>
+      <!-- pivot circle -->
+      <circle cx="190" cy="88" r="8" fill="#C9960C"/>
+      <!-- Left chain -->
+      <line x1="82" y1="92" x2="82" y2="128" stroke="#C9960C" stroke-width="2.5"/>
+      <!-- Right chain -->
+      <line x1="298" y1="92" x2="298" y2="128" stroke="#C9960C" stroke-width="2.5"/>
+      <!-- Left plate -->
+      <ellipse cx="82" cy="138" rx="44" ry="10" fill="#E8D4B0" stroke="#C9960C" stroke-width="2"/>
+      <!-- Right plate -->
+      <ellipse cx="298" cy="138" rx="44" ry="10" fill="#E8D4B0" stroke="#C9960C" stroke-width="2"/>
+      <!-- LEFT: potato (volumetric) -->
+      <ellipse cx="82" cy="120" rx="34" ry="24" fill="#B8864E"/>
+      <ellipse cx="82" cy="118" rx="28" ry="18" fill="#C8964E" opacity=".65"/>
+      <ellipse cx="66" cy="106" rx="16" ry="10" fill="#D4A870" opacity=".5"/>
+      <ellipse cx="88" cy="128" rx="30" ry="8" fill="#7A4F2D" opacity=".25"/>
+      <circle cx="72" cy="114" r="3" fill="#8B5E28" opacity=".55"/>
+      <!-- RIGHT: gold nuggets (volumetric) -->
+      <ellipse cx="285" cy="122" rx="16" ry="11" fill="#C8A020"/>
+      <ellipse cx="280" cy="118" rx="10" ry="7" fill="#E8C040" opacity=".65"/>
+      <ellipse cx="275" cy="116" rx="6" ry="4" fill="#FFD870" opacity=".5"/>
+      <ellipse cx="304" cy="118" rx="13" ry="9" fill="#C8A020"/>
+      <ellipse cx="300" cy="114" rx="8" ry="6" fill="#E8C040" opacity=".6"/>
+      <ellipse cx="294" cy="124" rx="10" ry="8" fill="#B88818"/>
+      <ellipse cx="292" cy="120" rx="6" ry="4.5" fill="#E8C040" opacity=".5"/>
+      <ellipse cx="304" cy="130" rx="42" ry="7" fill="#8B6010" opacity=".2"/>
+    </g>
+  </svg>
+  </svg></div>
+  <p class="body rv d2">Падчас залатой ліхаманкі на Аляске шахцёры аддавалі за бульбу шалёныя грошы — яна ратавала ад цынгі.</p>
+</section>
+
+<!-- ══════════════ S17 — ELECTRICITY ══════════════ -->
+<section id="s17">
+  <div class="wow rv" style="line-height:.92;font-size:clamp(28px,7.5vw,100px)">МОЖ ДАВАЦЬ<br>ЭЛЕКТРЫЧНАСЦЬ</div>
+  <div class="rv d1" style="display:flex;align-items:center;gap:clamp(10px,2.5vw,32px);flex-wrap:wrap;justify-content:center">
+    <!-- Potato with electrodes -->
+    <svg class="idle-breathe" viewBox="0 0 200 130" fill="none" style="width:clamp(130px,20vw,210px)">
+      <ellipse cx="100" cy="118" rx="72" ry="8" fill="#5C3A1E" opacity=".1"/>
+      <ellipse cx="100" cy="78" rx="74" ry="52" fill="#B8864E"/>
+      <ellipse cx="100" cy="76" rx="64" ry="42" fill="#C8964E" opacity=".65"/>
+      <ellipse cx="74" cy="56" rx="36" ry="22" fill="#D4A870" opacity=".5"/>
+      <ellipse cx="82" cy="78" rx="11" ry="6" fill="#9A6B35" opacity=".2" transform="rotate(-12,82,78)"/>
+      <ellipse cx="122" cy="70" rx="9" ry="5" fill="#9A6B35" opacity=".18" transform="rotate(10,122,70)"/>
+      <ellipse cx="136" cy="100" rx="74" ry="18" fill="#7A4F2D" opacity=".25"/>
+      <!-- zinc electrode (left) -->
+      <rect x="32" y="60" width="16" height="36" rx="3" fill="#B0B0B0" stroke="#909090" stroke-width="1.5"/>
+      <text x="40" y="102" text-anchor="middle" font-family="Manrope,sans-serif" font-size="7" fill="#606060">Zn</text>
+      <!-- copper electrode (right) -->
+      <rect x="152" y="60" width="16" height="36" rx="3" fill="#C8780A" stroke="#A05808" stroke-width="1.5"/>
+      <text x="160" y="102" text-anchor="middle" font-family="Manrope,sans-serif" font-size="7" fill="#604010">Cu</text>
+      <!-- wires -->
+      <path d="M32 68 L14 68 L14 28" stroke="#606060" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+      <path d="M168 68 L186 68 L186 28" stroke="#C8780A" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+    </svg>
+    <span class="wow" style="font-size:clamp(20px,3.5vw,44px);color:var(--terra)">→</span>
+    <!-- Lightbulb -->
+    <svg viewBox="0 0 100 150" fill="none" style="width:clamp(70px,11vw,110px)">
+      <!-- glow rings -->
+      <circle id="bglow" cx="50" cy="56" r="46" fill="#FFD080" opacity=".18"/>
+      <circle cx="50" cy="56" r="32" fill="#FFD080" opacity="0" id="bglow2"/>
+      <!-- bulb glass -->
+      <path d="M32 88 C18 72 16 36 50 22 C84 36 82 72 68 88Z" fill="#F5EDD8"/>
+      <path d="M32 88 C18 72 16 36 50 22 C84 36 82 72 68 88Z" fill="#FFE890" opacity="0" id="bfill"/>
+      <!-- glass highlight -->
+      <path d="M28 60 C24 48 24 36 30 28" stroke="white" stroke-width="3" stroke-linecap="round" opacity=".3"/>
+      <!-- filament -->
+      <path d="M38 74 L38 58 L44 66 L50 58 L56 66 L62 58 L62 74" stroke="#C9960C" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- base threads -->
+      <rect x="36" y="88" width="28" height="6" rx="2" fill="#C0C0C0"/>
+      <rect x="37" y="94" width="26" height="5" rx="2" fill="#B0B0B0"/>
+      <rect x="38" y="99" width="24" height="5" rx="2" fill="#A0A0A0"/>
+      <rect x="39" y="104" width="22" height="5" rx="2" fill="#909090"/>
+      <rect x="40" y="109" width="20" height="8" rx="3" fill="#808080"/>
+      <!-- wire from top -->
+      <line x1="14" y1="28" x2="36" y2="52" stroke="#606060" stroke-width="2" stroke-linecap="round"/>
+      <line x1="86" y1="28" x2="64" y2="52" stroke="#C8780A" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <p class="body rv d2">Дзякуючы хімічнай рэакцыі з электродамі адна бульбіна здольна асвятляць пакой больш за месяц.</p>
+</section>
+
+<!-- ══════════════ S18 — CLOSING ══════════════ -->
+<section id="s18">
+  <div class="confetti-container" id="cfc" style="position:absolute;inset:0;pointer-events:none;overflow:hidden"></div>
+  <div class="rv" style="display:flex;justify-content:center;position:relative;z-index:1"><svg class="idle-breathe" id="bow-pot" viewBox="0 0 280 220" fill="none" style="width:clamp(160px,26vw,300px)">
+    <g transform="rotate(-10,140,130)">
+      <ellipse cx="140" cy="148" rx="108" ry="78" fill="#B8864E"/>
+      <ellipse cx="140" cy="148" rx="96" ry="66" fill="#C8964E" opacity=".65"/>
+      <ellipse cx="108" cy="114" rx="58" ry="36" fill="#D4A870" opacity=".5"/>
+      <ellipse cx="116" cy="150" rx="16" ry="9" fill="#9A6B35" opacity=".2" transform="rotate(-14,116,150)"/>
+      <ellipse cx="168" cy="138" rx="14" ry="8" fill="#9A6B35" opacity=".18" transform="rotate(10,168,138)"/>
+      <ellipse cx="184" cy="178" rx="108" ry="26" fill="#7A4F2D" opacity=".24"/>
+      <!-- happy face -->
+      <path d="M118 160 C126 172 154 172 162 160" stroke="#8B5E28" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+      <circle cx="120" cy="148" r="4.5" fill="#8B5E28" opacity=".7"/>
+      <circle cx="160" cy="144" r="4.5" fill="#8B5E28" opacity=".7"/>
+    </g>
+    <!-- bow/hat line -->
+    <path d="M90 50 L140 68 L190 50" stroke="#C8581A" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <circle cx="140" cy="68" r="5" fill="#C8581A"/>
+  </svg>
+  </svg></div>
+  <div class="wow rv d1" style="font-size:clamp(32px,7vw,96px);line-height:.92;position:relative;z-index:1">І ўсё гэта —<br>бульба.</div>
+  <p class="body rv d2" style="position:relative;z-index:1">Гародніна, якая змяніла свет.</p>
+</section>
+
+<script>
+// ── PROGRESS BAR ──
+const pb = document.getElementById('pb');
+window.addEventListener('scroll', () => {
+  pb.style.width = (window.scrollY / (document.documentElement.scrollHeight - innerHeight) * 100) + '%';
+}, {passive:true});
+
+// ── STAR FIELD ──
+(function(){
+  const g = document.getElementById('sdots');
+  if(!g) return;
+  for(let i=0;i<80;i++){
+    const c = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    c.setAttribute('cx', Math.random()*1440);
+    c.setAttribute('cy', Math.random()*900);
+    c.setAttribute('r', (Math.random()*1.6+0.3).toFixed(1));
+    c.setAttribute('fill','#C0A878');
+    c.setAttribute('opacity',(Math.random()*.5+.15).toFixed(2));
+    g.appendChild(c);
+  }
+})();
+
+// ── VARIETY GRID ──
+(function(){
+  const grid = document.getElementById('vgrid');
+  if(!grid) return;
+  const cs = ['#F0E0A0','#E8C860','#C8781A','#A85010','#D4B090','#C8964E','#B87840','#884020','#6B3020','#8B7040','#5A3080','#3A1860','#6A4090','#9A6EB0','#C8B0D0','#7A9E5E','#5A7A3A','#A0501A'];
+  for(let i=0;i<50;i++){
+    const el = document.createElement('div');
+    el.className = 'vp';
+    const col = cs[i % cs.length];
+    const w = 14+Math.random()*20, h = w*(0.6+Math.random()*.25);
+    el.style.transitionDelay = (i*.045)+'s';
+    el.innerHTML = `<svg width="${w}" height="${h}" viewBox="0 0 60 40" fill="none"><ellipse cx="30" cy="20" rx="${28+Math.random()*8}" ry="${14+Math.random()*8}" fill="${col}" opacity=".88"/><ellipse cx="20" cy="14" rx="${8+Math.random()*6}" ry="${4+Math.random()*4}" fill="white" opacity=".18" transform="rotate(-18,20,14)"/></svg>`;
+    grid.appendChild(el);
+  }
+})();
+
+// ── COUNTRY DOTS ──
+(function(){
+  const g = document.getElementById('cdots');
+  if(!g) return;
+  const pts = [
+    [88,74],[102,88],[72,104],[118,66],[135,58],[150,70],[124,108],
+    [165,48],[176,88],[190,76],[204,65],[218,62],[230,52],[244,46],
+    [258,52],[272,62],[285,58],[300,50],[316,64],[330,68],[345,56],
+    [355,74],[360,90],[362,108],[348,122],[332,112],[306,98],[284,86],
+    [265,92],[248,82],[234,72],[220,86],[206,96],[192,108],[178,118],
+    [164,126],[148,136],[132,146],[116,132],[100,142],[82,150],[70,130],
+    [62,110],[58,90],[66,72],[80,62],[108,54],[128,48],[145,44],
+    [382,154],[396,164],[408,158],[414,170],[396,174],[382,168],[402,148],
+    [480,92],[490,78],[470,86],[462,68],[455,80]
+  ];
+  pts.forEach(([cx,cy],i)=>{
+    const c = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    c.setAttribute('cx',cx); c.setAttribute('cy',cy); c.setAttribute('r','4.5');
+    c.setAttribute('fill','#C8581A'); c.className.baseVal='cdot';
+    c.style.transitionDelay=(i*.022)+'s';
+    g.appendChild(c);
+  });
+})();
+
+// ── CHROM BARS ──
+(function(){
+  const hEl = document.getElementById('hbars'), pEl = document.getElementById('pbars');
+  if(!hEl||!pEl) return;
+  [[hEl,[['#C8581A',56],['#B84010',48]]],[pEl,[['#C8841A',56],['#B87418',42],['#A86010',50],['#D4962A',34]]]].forEach(([el,bars])=>{
+    bars.forEach(([col,h],i)=>{
+      const b = document.createElement('div');
+      b.className='cbar';
+      b.style.cssText=`background:${col};height:${h}px;width:clamp(13px,2vw,22px);border-radius:4px;transition-delay:${.1+i*.15}s;`;
+      el.appendChild(b);
+    });
+  });
+})();
+
+// ── SLOT MACHINE BILLION ──
+(function(){
+  const w = document.getElementById('slots-wrap');
+  if(!w) return;
+  const digits = '1000000000'.split('');
+  const seps = [0,3,6]; // positions after which to add space
+  digits.forEach((d,i)=>{
+    if(i>0 && [3,7].includes(i)){
+      const sp=document.createElement('div'); sp.className='slot-sep'; sp.textContent='\u00A0';
+      w.appendChild(sp);
+    }
+    const slot=document.createElement('div'); slot.className='slot-digit';
+    const inner=document.createElement('div'); inner.className='slot-inner';
+    // Stack 0..9 then target digit
+    for(let n=9;n>=0;n--){
+      const span=document.createElement('div');
+      span.style.height='clamp(40px,9vw,116px)';
+      span.style.lineHeight='clamp(40px,9vw,116px)';
+      span.textContent=n;
+      inner.appendChild(span);
+    }
+    // starting position (show 0 at top = index 9 is '0', index 0 is '9')
+    inner.style.transform='translateY(0)';
+    slot.appendChild(inner);
+    w.appendChild(slot);
+    slot._inner=inner;
+    slot._digit=d;
+    slot._idx=i;
+  });
+})();
+
+function rollSlots(){
+  document.querySelectorAll('.slot-digit').forEach((slot,i)=>{
+    const target = parseInt(slot._digit);
+    // items are 9,8,7,...,0 so index of target = 9-target
+    const targetIdx = 9 - target;
+    const h = slot.offsetHeight;
+    slot._inner.style.transitionDelay=(i*.08)+'s';
+    slot._inner.style.transitionDuration='.75s';
+    slot._inner.style.transform=`translateY(${targetIdx*h}px)`;
+  });
+}
+
+// ── COUNT UP ──
+function cu(el,from,to,dur,suf,fmt){
+  const t0=performance.now();
+  (function step(now){
+    const p=Math.min((now-t0)/dur,1), e=1-Math.pow(1-p,3);
+    const v=Math.round(from+(to-from)*e);
+    el.textContent=(fmt?fmt(v):v.toLocaleString('ru').replace(/,/g,' '))+(suf||'');
+    if(p<1) requestAnimationFrame(step);
+  })(t0);
+}
+
+// ── INTERSECTION OBSERVER ──
+// Reveal all
+document.querySelectorAll('.rv').forEach(el=>{
+  new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:.12}).observe(el);
+});
+
+function once(sel,fn,thr=.28){
+  const el=document.querySelector(sel); if(!el) return;
+  const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){fn(e.target);obs.unobserve(e.target);}}),{threshold:thr});
+  obs.observe(el);
+}
+
+// Merge anim
+once('#s4',()=>{
+  document.getElementById('m-cross').style.opacity='1';
+  setTimeout(()=>{ document.getElementById('m-arrow').style.opacity='1'; },700);
+  const r=document.getElementById('m-result');
+  setTimeout(()=>{ r.style.opacity='1'; r.style.transform='scale(1)'; },1300);
+});
+document.getElementById('m-cross').style.opacity='0';
+document.getElementById('m-cross').style.transition='opacity .5s .5s';
+document.getElementById('m-arrow').style.opacity='0';
+document.getElementById('m-arrow').style.transition='opacity .5s .9s';
+
+// Varieties counter + dots
+once('#var-n', el=>{ cu(el,0,4000,2000,'+'); setTimeout(()=>document.querySelectorAll('.vp').forEach((d,i)=>setTimeout(()=>d.classList.add('pop'),i*40)),300); });
+
+// Countries counter + dots
+once('#ctr-n', el=>{ cu(el,0,160,1600,''); setTimeout(()=>document.querySelectorAll('.cdot').forEach((d,i)=>setTimeout(()=>d.classList.add('lit'),i*22)),300); });
+
+// Billion slot machine
+once('#billion', ()=>{
+  const el = document.getElementById('billion-num');
+  if(el) cu(el, 0, 1000000000, 2800, '', n => {
+    if(n >= 1000000000) return '1\u00A0000\u00A0000\u00A0000';
+    return n.toLocaleString('ru').replace(/,/g,'\u00A0');
+  });
+});
+
+// Bars
+once('#bar-chart', ()=>{ document.querySelectorAll('.bar').forEach(b=>b.classList.add('up')); });
+
+// Dishes counter + cards
+once('#dish-n', el=>{ cu(el,0,300,1800,'+'); setTimeout(()=>document.querySelectorAll('.rcard').forEach((c,i)=>setTimeout(()=>c.classList.add('in'),i*120)),400); });
+
+// Water counter + fill
+once('#water-n', el=>{
+  cu(el,0,80,1600,'%');
+  setTimeout(()=>{
+    const f=document.getElementById('wfill'); if(f) f.classList.add('up');
+    setTimeout(()=>{ const p=document.getElementById('water-pct'); if(p)p.style.opacity='1'; },1200);
+  },300);
+});
+
+// Chrom bars
+once('#chrom-wrap', ()=>document.querySelectorAll('.cbar').forEach(b=>b.classList.add('up')));
+
+// Scale tip
+once('#s16', ()=>{ setTimeout(()=>{ const b=document.getElementById('scale-beam'); if(b)b.classList.add('tipped'); },400); });
+
+// Rocket launch
+once('#s15', ()=>{
+  setTimeout(()=>{
+    const r=document.getElementById('rocket-svg');
+    if(r){ r.style.transform='translateY(-24px)'; r.style.opacity='1'; r.style.animation='rocketFloat 2.6s ease-in-out infinite 1.2s'; }
+  }, 400);
+});
+
+// Bulb glow
+once('#s17', ()=>{
+  setTimeout(()=>{
+    const g=document.getElementById('bglow'); if(g)g.classList.add('on');
+    const g2=document.getElementById('bglow2'); if(g2){ g2.style.opacity='.22'; g2.style.animation='glow 1.5s ease-in-out infinite'; }
+    const f=document.getElementById('bfill'); if(f){ f.style.opacity='.8'; f.style.animation='glow 1.5s ease-in-out infinite'; }
+  },500);
+});
+
+// Closing confetti
+once('#s18', ()=>{
+  const c=document.getElementById('cfc'); if(!c) return;
+  const colors=['#C8581A','#D4962A','#7A9E5E','#C9960C','#B8D4BB','#E8845A','#A87828'];
+  for(let i=0;i<50;i++){
+    const p=document.createElement('div'); p.className='cf';
+    const col=colors[i%colors.length], x=Math.random()*100, delay=Math.random()*3.5, dur=3+Math.random()*4, s=8+Math.random()*16;
+    p.innerHTML=`<svg width="${s}" height="${s*.65}" viewBox="0 0 60 38" fill="none"><ellipse cx="30" cy="19" rx="28" ry="17" fill="${col}" opacity=".8"/><ellipse cx="20" cy="13" rx="10" ry="5" fill="white" opacity=".18" transform="rotate(-15,20,13)"/></svg>`;
+    p.style.cssText=`left:${x}%;top:-50px;animation:cffall ${dur}s ${delay}s ease-in forwards;`;
+    c.appendChild(p);
+  }
+});
+</script>
+</body>
+</html>
